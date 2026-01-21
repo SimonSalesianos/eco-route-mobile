@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'ui/login_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const EcoRouteApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class EcoRouteApp extends StatelessWidget {
+  const EcoRouteApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'EcoRoute',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-   
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        primarySwatch: Colors.deepPurple,
+        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+        fontFamily: 'Roboto',
       ),
-      home: const LogView(title: 'Flutter Demo Home Page'),
+      home: const LoginScreen(),
     );
   }
 }
-
