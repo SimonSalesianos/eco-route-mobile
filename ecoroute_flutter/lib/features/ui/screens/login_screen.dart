@@ -1,11 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/services/auth_service.dart';
+import '../../bloc/home_bloc.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/password_field.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _authService = AuthService();
+
+  bool _isLoading = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _onLoginPressed() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      await _authService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      if (!mounted) return;
+
+      context.read<HomeBloc>().add(HomeStarted());
+
+      Navigator.pushReplacementNamed(context, '/home');
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +118,11 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const CustomTextField(
+                CustomTextField(
                   label: 'tu@email.com',
                   icon: Icons.mail_outline,
                   keyboardType: TextInputType.emailAddress,
+                  controller: _emailController,
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -80,13 +134,26 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const PasswordField(label: '********'),
-                const SizedBox(height: 28),
+                PasswordField(
+                  label: '********',
+                  controller: _passwordController,
+                ),
+                const SizedBox(height: 12),
+                if (_error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(
+                      _error!,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 16),
                 CustomButton(
-                  text: 'Iniciar Sesión',
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  },
+                  text: _isLoading ? 'Entrando...' : 'Iniciar Sesión',
+                  onPressed: _isLoading ? null : _onLoginPressed,
                 ),
                 const SizedBox(height: 24),
                 Center(
@@ -122,4 +189,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
- 

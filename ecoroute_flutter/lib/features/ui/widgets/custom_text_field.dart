@@ -4,40 +4,34 @@ import '../theme/app_colors.dart';
 class CustomTextField extends StatelessWidget {
   final String label;
   final IconData icon;
-  final TextInputType keyboardType;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.icon,
-    this.keyboardType = TextInputType.text,
+    this.keyboardType,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        hintText: label,
+        prefixIcon: Icon(icon, color: AppColors.lightText),
         filled: true,
-        fillColor: Colors.white,
-        labelText: label,
-        labelStyle: const TextStyle(
-          color: AppColors.lightText,
-        ),
-        prefixIcon: Icon(
-          icon,
-          color: AppColors.lightText,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+        fillColor: const Color(0xFFF5F5F5),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 1.5,
-          ),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
     );
