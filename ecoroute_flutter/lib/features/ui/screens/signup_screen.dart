@@ -43,12 +43,10 @@ class _SignupScreenState extends State<SignupScreen> {
       _error = null;
     });
 
-    // TODO: Implementar llamada al servicio de registro
     await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
 
-    // Simulamos éxito y navegamos a login
     Navigator.pushReplacementNamed(context, '/login');
   }
 

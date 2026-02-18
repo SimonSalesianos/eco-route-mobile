@@ -4,6 +4,9 @@ import 'package:flutter_application_tmdb_proyecto/core/config/api_constants.dart
 import 'package:flutter_application_tmdb_proyecto/core/services/secure_storage_service.dart';
 import 'package:http/http.dart' as http;
 
+import '../config/api_constants.dart';
+import 'secure_storage_service.dart';
+
 class AuthService {
   final http.Client _client;
   final SecureStorageService _storage;
