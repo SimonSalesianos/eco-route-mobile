@@ -19,7 +19,7 @@ class RoutesService implements RoutesRepository {
   Future<List<EcoRoute>> getRoutes() async {
     final uri = Uri.parse(ApiConstants.routes);
     final token = await _storage.getToken();
-    
+
     if (token == null) {
       throw Exception('No hay token almacenado');
     }
@@ -42,9 +42,9 @@ class RoutesService implements RoutesRepository {
           return EcoRoute(
             id: map['id'].toString(),
             name: map['name'] as String,
-            distanceKm: (map['distance_km'] as num).toDouble(),
+            distanceKm: double.parse(map['distance_km'].toString()),
             durationMinutes: map['duration_minutes'] as int,
-            co2SavedKg: (map['co2_saved_kg'] as num).toDouble(),
+            co2SavedKg: double.parse(map['co2_saved_kg'].toString()),
             difficulty: _difficultyFromString(map['difficulty'] as String),
           );
         }).toList();
@@ -52,7 +52,7 @@ class RoutesService implements RoutesRepository {
         throw Exception('Error ${response.statusCode} al obtener rutas');
       }
     } catch (e) {
-      throw Exception('Error al obtener las rutas');
+      throw Exception('Error al obtener las rutas: $e');
     }
   }
 

@@ -5,8 +5,19 @@ import '../../bloc/challenges_bloc.dart';
 import '../theme/app_colors.dart';
 import '../widgets/challenge_card.dart';
 
-class ChallengesScreen extends StatelessWidget {
+class ChallengesScreen extends StatefulWidget {
   const ChallengesScreen({super.key});
+
+  @override
+  State<ChallengesScreen> createState() => _ChallengesScreenState();
+}
+
+class _ChallengesScreenState extends State<ChallengesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ChallengesBloc>().add(ChallengesRequested());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +67,6 @@ class ChallengesScreen extends StatelessWidget {
           }
 
           if (state is ChallengesLoaded) {
-            // Calcular resumen
             final totalPoints = state.challenges.fold<int>(
               0,
               (sum, c) => sum + c.rewardPoints,
@@ -72,7 +82,6 @@ class ChallengesScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Resumen en cards
                     Row(
                       children: [
                         Expanded(
@@ -104,7 +113,6 @@ class ChallengesScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 24),
-
                     const Text(
                       'Retos Activos',
                       style: TextStyle(
@@ -114,8 +122,6 @@ class ChallengesScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-
-                    // Lista de retos
                     state.challenges.isEmpty
                         ? const Center(
                             child: Text('No hay retos disponibles'),

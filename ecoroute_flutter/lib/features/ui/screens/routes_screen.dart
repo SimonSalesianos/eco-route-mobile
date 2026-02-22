@@ -5,8 +5,19 @@ import '../../bloc/bloc/routes_bloc.dart';
 import '../theme/app_colors.dart';
 import '../widgets/route_card.dart';
 
-class RoutesScreen extends StatelessWidget {
+class RoutesScreen extends StatefulWidget {
   const RoutesScreen({super.key});
+
+  @override
+  State<RoutesScreen> createState() => _RoutesScreenState();
+}
+
+class _RoutesScreenState extends State<RoutesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<RoutesBloc>().add(RoutesRequested());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +69,6 @@ class RoutesScreen extends StatelessWidget {
           if (state is RoutesLoaded) {
             return Column(
               children: [
-                // Barra de búsqueda
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: TextField(
@@ -74,8 +84,6 @@ class RoutesScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
-                // Lista de rutas
                 Expanded(
                   child: state.routes.isEmpty
                       ? const Center(

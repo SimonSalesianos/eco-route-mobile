@@ -93,7 +93,6 @@ class RouteCard extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // TODO: Navegar a detalle o iniciar ruta
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,

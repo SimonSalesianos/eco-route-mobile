@@ -22,7 +22,6 @@ class ChatService implements ChatRepository {
         final messages = await _fetchMessagesOnce();
         yield messages;
       } catch (_) {
-        // Log error si necesitas
       }
 
       await Future.delayed(const Duration(seconds: 5));

@@ -52,7 +52,6 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header con saludo
                       Text(
                         '¡Hola, ${state.user.fullName}! 👋',
                         style: const TextStyle(
@@ -71,7 +70,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
 
-                      // Stats cards
                       Row(
                         children: [
                           Expanded(
@@ -114,7 +112,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 32),
 
-                      // Menú principal
                       const Text(
                         'Menú Principal',
                         style: TextStyle(

@@ -83,7 +83,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          // Lista de mensajes
           Expanded(
             child: BlocBuilder<ChatBloc, ChatState>(
               builder: (context, state) {
@@ -134,7 +133,6 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
 
-          // Barra de entrada de mensaje
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
