@@ -21,9 +21,9 @@ class ChatService implements ChatRepository {
       try {
         final messages = await _fetchMessagesOnce();
         yield messages;
-      } catch (_) {
+      } catch (e) {
+        throw Exception('Error al obtener mensajes: $e');
       }
-
       await Future.delayed(const Duration(seconds: 5));
     }
   }
@@ -31,65 +31,67 @@ class ChatService implements ChatRepository {
   Future<List<ChatMessage>> _fetchMessagesOnce() async {
     final uri = Uri.parse(ApiConstants.chatMessages);
     final token = await _storage.getToken();
-    
-    if (token == null) {
-      throw Exception('No hay token almacenado');
-    }
+
+    if (token == null) throw Exception('No hay token almacenado');
 
     final response = await _client.get(
       uri,
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
     );
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final data = json.decode(response.body) as List<dynamic>;
-
       return data.map((messageJson) {
         final map = messageJson as Map<String, dynamic>;
 
+        // Construye las iniciales si el backend no las devuelve
+        final authorName = (map['author_name'] as String?) ?? 'Usuario';
+        final authorInitials = (map['author_initials'] as String?)
+            ?? (authorName.isNotEmpty ? authorName[0].toUpperCase() : '?');
+
         return ChatMessage(
           id: map['id'].toString(),
-          authorName: map['author_name'] as String,
-          authorInitials: map['author_initials'] as String,
-          text: map['text'] as String,
-          createdAt: DateTime.parse(map['created_at'] as String),
+          authorName: authorName,
+          authorInitials: authorInitials,
+          // Acepta tanto 'text' como 'content' según lo que devuelva el backend
+          text: (map['text'] ?? map['content'] ?? '') as String,
+          createdAt: DateTime.parse(
+            (map['created_at'] ?? map['updated_at']).toString(),
+          ),
           isMine: map['is_mine'] as bool? ?? false,
         );
       }).toList();
     } else {
-      throw Exception(
-        'Error ${response.statusCode} al obtener mensajes del chat',
-      );
+      throw Exception('Error ${response.statusCode} al obtener mensajes');
     }
   }
 
   @override
-  Future<void> sendMessage(String text) async {
-    final uri = Uri.parse(ApiConstants.chatMessages);
-    final token = await _storage.getToken();
-    
-    if (token == null) {
-      throw Exception('No hay token almacenado');
-    }
+Future<void> sendMessage(String text) async {
+  final uri = Uri.parse(ApiConstants.chatMessages);
+  final token = await _storage.getToken();
 
-    try {
-      final response = await _client.post(
-        uri,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({'text': text}),
-      );
+  if (token == null) throw Exception('No hay token almacenado');
 
-      if (!(response.statusCode >= 200 && response.statusCode < 300)) {
-        throw Exception('Error ${response.statusCode} al enviar mensaje');
-      }
-    } catch (e) {
-      throw Exception('Error al enviar el mensaje');
-    }
+  final response = await _client.post(
+    uri,
+    headers: {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: json.encode({
+      'content': text, 
+    }),
+  );
+
+  if (!(response.statusCode >= 200 && response.statusCode < 300)) {
+    throw Exception('Error ${response.statusCode} al enviar mensaje');
   }
+}
+
 }

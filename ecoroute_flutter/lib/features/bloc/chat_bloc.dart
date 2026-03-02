@@ -27,12 +27,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     await _subscription?.cancel();
     _subscription = _chatRepository.watchChatMessages().listen(
-      (messages) {
-        add(_ChatMessagesUpdated(messages));
-      },
-      onError: (error) {
-        emit(ChatError(message: error.toString()));
-      },
+      (messages) => add(_ChatMessagesUpdated(messages)),
+      onError: (error) => emit(ChatError(message: error.toString())),
     );
   }
 
@@ -42,6 +38,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     try {
       await _chatRepository.sendMessage(event.text);
+      // Recarga inmediata sin esperar los 5 segundos del polling
+      final messages = await _chatRepository.watchChatMessages().first;
+      emit(ChatLoaded(messages: messages));
     } catch (e) {
       emit(ChatError(message: e.toString()));
     }

@@ -11,21 +11,21 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment:
             message.isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           if (!message.isMine) ...[
             CircleAvatar(
               backgroundColor: AppColors.primary,
-              radius: 18,
+              radius: 16,
               child: Text(
                 message.authorInitials,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -38,53 +38,56 @@ class MessageBubble extends StatelessWidget {
                   ? CrossAxisAlignment.end
                   : CrossAxisAlignment.start,
               children: [
-                if (!message.isMine)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, bottom: 4),
-                    child: Text(
-                      message.authorName,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.darkText,
-                      ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: message.isMine ? 0 : 4,
+                    right: message.isMine ? 4 : 0,
+                    bottom: 4,
+                  ),
+                  child: Text(
+                    message.authorName,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.darkText,
                     ),
                   ),
+                ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+                    horizontal: 14,
+                    vertical: 10,
                   ),
                   decoration: BoxDecoration(
                     color: message.isMine
                         ? AppColors.primary
-                        : const Color(0xFFF5F5F5),
+                        : const Color(0xFFF0F0F0),
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(16),
                       topRight: const Radius.circular(16),
-                      bottomLeft: message.isMine
-                          ? const Radius.circular(16)
-                          : const Radius.circular(4),
-                      bottomRight: message.isMine
-                          ? const Radius.circular(4)
-                          : const Radius.circular(16),
+                      bottomLeft:
+                          Radius.circular(message.isMine ? 16 : 4),
+                      bottomRight:
+                          Radius.circular(message.isMine ? 4 : 16),
                     ),
                   ),
                   child: Text(
                     message.text,
                     style: TextStyle(
                       fontSize: 14,
-                      color: message.isMine ? Colors.white : AppColors.darkText,
+                      color: message.isMine
+                          ? Colors.white
+                          : AppColors.darkText,
                     ),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(
                     _formatTime(message.createdAt),
                     style: const TextStyle(
-                      fontSize: 11,
+                      fontSize: 10,
                       color: AppColors.lightText,
                     ),
                   ),
@@ -96,12 +99,12 @@ class MessageBubble extends StatelessWidget {
             const SizedBox(width: 8),
             CircleAvatar(
               backgroundColor: AppColors.primary,
-              radius: 18,
+              radius: 16,
               child: Text(
                 message.authorInitials,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
               ),

@@ -9,5 +9,5 @@ class ApiConstants {
   static const String currentStats     = '${baseUrl}stats/current';
   static const String routes           = '${baseUrl}routes';
   static const String challengesActive = '${baseUrl}challenges/active';
-  static const String chatMessages     = '${baseUrl}chat/messages';
+  static const String chatMessages     = '${baseUrl}chat/messages'; 
 }

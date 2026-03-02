@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_tmdb_proyecto/core/services/auth_service.dart';
 
 import '../theme/app_colors.dart';
 import '../widgets/custom_button.dart';
@@ -17,6 +18,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+
+  final _authService = AuthService();
 
   bool _isLoading = false;
   String? _error;
@@ -43,11 +46,29 @@ class _SignupScreenState extends State<SignupScreen> {
       _error = null;
     });
 
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      await _authService.register(
+        name: _nameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        passwordConfirmation: _confirmPasswordController.text,
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override

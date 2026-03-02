@@ -29,6 +29,16 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
   void _sendMessage() {
     final text = _messageController.text.trim();
     if (text.isNotEmpty) {
@@ -52,10 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             const CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.group,
-                color: AppColors.primary,
-              ),
+              child: Icon(Icons.group, color: AppColors.primary),
             ),
             const SizedBox(width: 12),
             const Column(
@@ -71,10 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 Text(
                   '24 miembros',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),
@@ -84,7 +88,14 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: BlocBuilder<ChatBloc, ChatState>(
+            child: BlocConsumer<ChatBloc, ChatState>(
+              listener: (context, state) {
+                if (state is ChatLoaded) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _scrollToBottom();
+                  });
+                }
+              },
               builder: (context, state) {
                 if (state is ChatLoading) {
                   return const Center(child: CircularProgressIndicator());
@@ -96,15 +107,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Error: ${state.message}',
+                          state.message,
                           style: const TextStyle(color: Colors.red),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () {
-                            context.read<ChatBloc>().add(ChatStarted());
-                          },
+                          onPressed: () =>
+                              context.read<ChatBloc>().add(ChatStarted()),
                           child: const Text('Reintentar'),
                         ),
                       ],
@@ -113,19 +123,23 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
 
                 if (state is ChatLoaded) {
-                  return state.messages.isEmpty
-                      ? const Center(
-                          child: Text('No hay mensajes todavía'),
-                        )
-                      : ListView.builder(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.all(16),
-                          itemCount: state.messages.length,
-                          itemBuilder: (context, index) {
-                            final message = state.messages[index];
-                            return MessageBubble(message: message);
-                          },
-                        );
+                  if (state.messages.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No hay mensajes todavía',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    );
+                  }
+                  return ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.all(16),
+                    itemCount: state.messages.length,
+                    itemBuilder: (context, index) {
+                      final message = state.messages[index];
+                      return MessageBubble(message: message);
+                    },
+                  );
                 }
 
                 return const SizedBox();

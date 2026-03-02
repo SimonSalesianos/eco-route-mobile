@@ -20,3 +20,5 @@ final class HomeError extends HomeState {
 
   HomeError({required this.message});
 }
+
+final class HomeLoggedOut extends HomeState {}
