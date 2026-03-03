@@ -38,7 +38,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     try {
       await _chatRepository.sendMessage(event.text);
-      // Recarga inmediata sin esperar los 5 segundos del polling
       final messages = await _chatRepository.watchChatMessages().first;
       emit(ChatLoaded(messages: messages));
     } catch (e) {

@@ -33,7 +33,4 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Descomenta si añades imágenes o iconos personalizados:
-  # assets:
-  #   - assets/images/
-  #   - assets/icons/
+

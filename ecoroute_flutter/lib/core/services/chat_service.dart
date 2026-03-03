@@ -48,7 +48,6 @@ class ChatService implements ChatRepository {
       return data.map((messageJson) {
         final map = messageJson as Map<String, dynamic>;
 
-        // Construye las iniciales si el backend no las devuelve
         final authorName = (map['author_name'] as String?) ?? 'Usuario';
         final authorInitials = (map['author_initials'] as String?)
             ?? (authorName.isNotEmpty ? authorName[0].toUpperCase() : '?');
@@ -57,7 +56,6 @@ class ChatService implements ChatRepository {
           id: map['id'].toString(),
           authorName: authorName,
           authorInitials: authorInitials,
-          // Acepta tanto 'text' como 'content' según lo que devuelva el backend
           text: (map['text'] ?? map['content'] ?? '') as String,
           createdAt: DateTime.parse(
             (map['created_at'] ?? map['updated_at']).toString(),
