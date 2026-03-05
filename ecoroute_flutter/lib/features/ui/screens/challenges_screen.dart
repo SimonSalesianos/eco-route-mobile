@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_tmdb_proyecto/features/ui/screens/active_challenge_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/challenges_bloc.dart';
@@ -67,13 +68,16 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
           }
 
           if (state is ChallengesLoaded) {
-            final totalPoints = state.challenges.fold<int>(
-              0,
-              (sum, c) => sum + c.rewardPoints,
-            );
-            final completed = state.challenges
+            // ✅ Completados desde la API + completados localmente
+            final completedFromApi = state.challenges
                 .where((c) => c.progressCurrent >= c.progressTotal)
                 .length;
+            final completedLocal = ActiveChallengeService().totalCompleted;
+            final completed = completedFromApi + completedLocal;
+
+            // ✅ Puntos solo de retos completados localmente
+            final totalPoints = ActiveChallengeService().totalPoints;
+
             final active = state.challenges.length - completed;
 
             return SingleChildScrollView(
@@ -87,7 +91,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         Expanded(
                           child: _SummaryCard(
                             icon: Icons.star,
-                            value: totalPoints.toString(),
+                            value: totalPoints.toString(), // ✅ puntos reales
                             label: 'Puntos Totales',
                             color: const Color(0xFFFFA726),
                           ),
@@ -96,7 +100,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         Expanded(
                           child: _SummaryCard(
                             icon: Icons.check_circle,
-                            value: completed.toString(),
+                            value: completed.toString(), // ✅ completados reales
                             label: 'Completados',
                             color: const Color(0xFF4CAF50),
                           ),
@@ -134,7 +138,11 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                               final challenge = state.challenges[index];
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
-                                child: ChallengeCard(challenge: challenge),
+                                child: ChallengeCard(
+                                  challenge: challenge,
+                                  // ✅ Refresca los contadores al volver del detalle
+                                  onReturn: () => setState(() {}),
+                                ),
                               );
                             },
                           ),

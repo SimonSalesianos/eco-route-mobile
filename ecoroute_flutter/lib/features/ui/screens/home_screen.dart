@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_tmdb_proyecto/features/ui/screens/active_challenge_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/active_route_service.dart';
 import '../../bloc/home_bloc.dart';
 import '../theme/app_colors.dart';
 import '../widgets/stats_card.dart';
@@ -10,11 +12,20 @@ import 'challenges_screen.dart';
 import 'chat_screen.dart';
 import 'login_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
+    final localPoints      = ActiveChallengeService().totalPoints;
+    final localCompleted   = ActiveChallengeService().totalCompleted;
+    final localRoutes      = ActiveRouteService().completedRoutes;
+
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
         if (state is HomeLoggedOut) {
@@ -80,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '¡Hola, ${state.user.fullName}!', 
+                          '¡Hola, ${state.user.fullName}!',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -102,7 +113,8 @@ class HomeScreen extends StatelessWidget {
                             Expanded(
                               child: StatsCard(
                                 icon: Icons.route,
-                                value: state.stats.totalRoutes.toString(),
+                                // ✅ API + rutas finalizadas localmente
+                                value: (state.stats.totalRoutes + localRoutes).toString(),
                                 label: 'Rutas\nCompletadas',
                                 color: AppColors.primary,
                               ),
@@ -111,8 +123,7 @@ class HomeScreen extends StatelessWidget {
                             Expanded(
                               child: StatsCard(
                                 icon: Icons.eco,
-                                value:
-                                    '${state.stats.totalCo2SavedKg.toStringAsFixed(0)} kg',
+                                value: '${state.stats.totalCo2SavedKg.toStringAsFixed(0)} kg',
                                 label: 'CO₂\nAhorrado',
                                 color: const Color(0xFF4CAF50),
                               ),
@@ -125,14 +136,22 @@ class HomeScreen extends StatelessWidget {
                             Expanded(
                               child: StatsCard(
                                 icon: Icons.emoji_events,
-                                value:
-                                    state.stats.totalAchievements.toString(),
+                                // ✅ API + retos completados localmente
+                                value: (state.stats.totalAchievements + localCompleted).toString(),
                                 label: 'Logros\nObtenidos',
                                 color: const Color(0xFFFFA726),
                               ),
                             ),
                             const SizedBox(width: 12),
-                            const Expanded(child: SizedBox()),
+                            Expanded(
+                              child: StatsCard(
+                                icon: Icons.star,
+                                // ✅ Puntos de retos completados
+                                value: localPoints.toString(),
+                                label: 'Puntos\nGanados',
+                                color: const Color(0xFFFFA726),
+                              ),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 32),
@@ -152,10 +171,14 @@ class HomeScreen extends StatelessWidget {
                           title: 'Explorar Rutas',
                           subtitle: 'Descubre nuevas rutas ecológicas',
                           color: AppColors.primary,
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const RoutesScreen()),
-                          ),
+                          onTap: () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const RoutesScreen(),
+                              ),
+                            );
+                            if (mounted) setState(() {}); // ✅ refresca al volver
+                          },
                         ),
                         const SizedBox(height: 12),
                         HomeMenuCard(
@@ -163,10 +186,14 @@ class HomeScreen extends StatelessWidget {
                           title: 'Retos y Eventos',
                           subtitle: 'Participa en desafíos sostenibles',
                           color: const Color(0xFFFFA726),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const ChallengesScreen()),
-                          ),
+                          onTap: () async {
+                            await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const ChallengesScreen(),
+                              ),
+                            );
+                            if (mounted) setState(() {}); // ✅ refresca al volver
+                          },
                         ),
                         const SizedBox(height: 12),
                         HomeMenuCard(
@@ -175,8 +202,7 @@ class HomeScreen extends StatelessWidget {
                           subtitle: 'Conecta con otros EcoWarriors',
                           color: const Color(0xFF42A5F5),
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (_) => const ChatScreen()),
+                            MaterialPageRoute(builder: (_) => const ChatScreen()),
                           ),
                         ),
                       ],
