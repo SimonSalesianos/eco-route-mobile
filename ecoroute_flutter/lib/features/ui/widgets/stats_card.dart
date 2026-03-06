@@ -23,7 +23,7 @@ class StatsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min, // ← fix del overflow
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: color, size: 26),
           const SizedBox(height: 6),

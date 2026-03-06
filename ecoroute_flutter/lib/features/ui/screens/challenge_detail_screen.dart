@@ -77,7 +77,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
             ),
             const SizedBox(height: 8),
 
-            // Descripción
             Center(
               child: Text(
                 c.description,
@@ -87,7 +86,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Dificultad + días
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -116,7 +114,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Stats
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -151,7 +148,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
 
             const Spacer(),
 
-            // Estado completado
             if (isCompleted)
               Container(
                 width: double.infinity,
@@ -177,12 +173,11 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                 ),
               )
             else if (_joined)
-              // Botón completar
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    ActiveChallengeService().complete(c.id, c.rewardPoints); // ✅
+                    ActiveChallengeService().complete(c.id, c.rewardPoints); 
                     setState(() {});
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -209,7 +204,6 @@ class _ChallengeDetailScreenState extends State<ChallengeDetailScreen> {
                 ),
               )
             else
-              // Botón unirse
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

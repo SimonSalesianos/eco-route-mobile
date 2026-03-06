@@ -113,7 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               child: StatsCard(
                                 icon: Icons.route,
-                                // ✅ API + rutas finalizadas localmente
                                 value: (state.stats.totalRoutes + localRoutes).toString(),
                                 label: 'Rutas\nCompletadas',
                                 color: AppColors.primary,
@@ -136,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               child: StatsCard(
                                 icon: Icons.emoji_events,
-                                // ✅ API + retos completados localmente
                                 value: (state.stats.totalAchievements + localCompleted).toString(),
                                 label: 'Logros\nObtenidos',
                                 color: const Color(0xFFFFA726),
@@ -146,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             Expanded(
                               child: StatsCard(
                                 icon: Icons.star,
-                                // ✅ Puntos de retos completados
                                 value: localPoints.toString(),
                                 label: 'Puntos\nGanados',
                                 color: const Color(0xFFFFA726),
@@ -177,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 builder: (_) => const RoutesScreen(),
                               ),
                             );
-                            if (mounted) setState(() {}); // ✅ refresca al volver
+                            if (mounted) setState(() {}); 
                           },
                         ),
                         const SizedBox(height: 12),
@@ -192,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 builder: (_) => const ChallengesScreen(),
                               ),
                             );
-                            if (mounted) setState(() {}); // ✅ refresca al volver
+                            if (mounted) setState(() {}); 
                           },
                         ),
                         const SizedBox(height: 12),

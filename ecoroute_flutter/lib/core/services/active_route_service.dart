@@ -6,7 +6,7 @@ class ActiveRouteService {
   ActiveRouteService._internal();
 
   EcoRoute? activeRoute;
-  int completedRoutes = 0; // ✅ contador local
+  int completedRoutes = 0; 
 
   bool isActive(String routeId) => activeRoute?.id == routeId;
 
@@ -14,7 +14,7 @@ class ActiveRouteService {
 
   void finish() {
     if (activeRoute != null) {
-      completedRoutes++; // ✅ suma al finalizar
+      completedRoutes++; 
       activeRoute = null;
     }
   }

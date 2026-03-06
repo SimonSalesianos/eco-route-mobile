@@ -88,7 +88,6 @@ class RouteActiveScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            // Volver al menú SIN finalizar
             SizedBox(
               width: double.infinity,
               child: OutlinedButton(
@@ -113,7 +112,6 @@ class RouteActiveScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            // Finalizar SÍ borra la ruta activa
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

@@ -33,7 +33,6 @@ class RouteDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Icono grande
             Center(
               child: Container(
                 width: 80,
@@ -51,7 +50,6 @@ class RouteDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Nombre
             Center(
               child: Text(
                 route.name,
@@ -65,7 +63,6 @@ class RouteDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Dificultad
             Center(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -84,7 +81,6 @@ class RouteDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
-            // Stats
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -108,7 +104,6 @@ class RouteDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
-            // Info extra
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -131,12 +126,11 @@ class RouteDetailScreen extends StatelessWidget {
 
             const Spacer(),
 
-            // Botón Comenzar
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  ActiveRouteService().start(route); // ✅ Marca como activa
+                  ActiveRouteService().start(route); 
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => RouteActiveScreen(route: route),

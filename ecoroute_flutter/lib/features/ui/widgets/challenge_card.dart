@@ -34,7 +34,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
             builder: (_) => ChallengeDetailScreen(challenge: c),
           ),
         );
-        widget.onReturn?.call(); // ✅ refresca contadores en ChallengesScreen
+        widget.onReturn?.call(); 
         if (mounted) setState(() {});
       },
       child: Container(
@@ -99,7 +99,6 @@ class _ChallengeCardState extends State<ChallengeCard> {
                     ],
                   ),
                 ),
-                // Badge estado
                 if (isCompleted)
                   const Icon(Icons.check_circle, color: Color(0xFF4CAF50), size: 20)
                 else if (isJoined)

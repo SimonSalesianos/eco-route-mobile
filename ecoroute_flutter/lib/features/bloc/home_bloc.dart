@@ -5,7 +5,7 @@ import '../../../core/interfaces/user_repository.dart';
 import '../../../core/interfaces/stats_repository.dart';
 import '../../../core/models/user.dart';
 import '../../../core/models/stats.dart';
-import '../../../core/services/secure_storage_service.dart'; // ← cambiado
+import '../../../core/services/secure_storage_service.dart'; 
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -13,7 +13,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final UserRepository _userRepository;
   final StatsRepository _statsRepository;
-  final SecureStorageService _storage = SecureStorageService(); // ← nuevo
+  final SecureStorageService _storage = SecureStorageService(); 
 
   HomeBloc(this._userRepository, this._statsRepository)
       : super(HomeLoading()) {

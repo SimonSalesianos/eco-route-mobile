@@ -68,14 +68,12 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
           }
 
           if (state is ChallengesLoaded) {
-            // ✅ Completados desde la API + completados localmente
             final completedFromApi = state.challenges
                 .where((c) => c.progressCurrent >= c.progressTotal)
                 .length;
             final completedLocal = ActiveChallengeService().totalCompleted;
             final completed = completedFromApi + completedLocal;
 
-            // ✅ Puntos solo de retos completados localmente
             final totalPoints = ActiveChallengeService().totalPoints;
 
             final active = state.challenges.length - completed;
@@ -91,7 +89,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         Expanded(
                           child: _SummaryCard(
                             icon: Icons.star,
-                            value: totalPoints.toString(), // ✅ puntos reales
+                            value: totalPoints.toString(),
                             label: 'Puntos Totales',
                             color: const Color(0xFFFFA726),
                           ),
@@ -100,7 +98,7 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                         Expanded(
                           child: _SummaryCard(
                             icon: Icons.check_circle,
-                            value: completed.toString(), // ✅ completados reales
+                            value: completed.toString(), 
                             label: 'Completados',
                             color: const Color(0xFF4CAF50),
                           ),
@@ -140,7 +138,6 @@ class _ChallengesScreenState extends State<ChallengesScreen> {
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: ChallengeCard(
                                   challenge: challenge,
-                                  // ✅ Refresca los contadores al volver del detalle
                                   onReturn: () => setState(() {}),
                                 ),
                               );
